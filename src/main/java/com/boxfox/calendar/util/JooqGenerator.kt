@@ -28,7 +28,7 @@ object JooqGenerator {
                                 .withIncludes(".*")
                                 .withExcludes("")
                                 .withInputSchema("public"))
-                        .withTarget(Target().withPackageName("org.gdg.withgo.data.database")
+                        .withTarget(Target().withPackageName("com.boxfox.calendar.data.database")
                                 .withDirectory("src/main/java")))
 
         GenerationTool.generate(configuration)
