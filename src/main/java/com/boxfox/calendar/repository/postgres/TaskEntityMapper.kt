@@ -5,7 +5,8 @@ import com.boxfox.calendar.model.Task
 import org.jooq.Record
 
 object TaskEntityMapper {
-    fun fromRecord(record: Record) = Task(record.get(TASK.ID)).apply {
+    fun fromRecord(record: Record) = Task().apply {
+        this.id = record.get(TASK.ID)
         this.name = record.get(TASK.NAME)
         this.date = record.get(TASK.DAY)
         this.hour = record.get(TASK.HOUR)

@@ -2,12 +2,13 @@ package com.boxfox.calendar.model.lambda
 
 import com.boxfox.calendar.model.Task
 
-class TaskCreateRequest(id: Int, val endHour: Int) : Task(id), Request {
+class TaskCreateRequest: Task(), Request {
+    var endHour: Short = 0
 
     override fun assertFields() {
         valid(name, "missing parameter : name")
         valid(date, "missing parameter date")
         assertTrue(hour in 1..24, "invalid parameter : hour")
-        assertTrue(endHour > 0, "invalid paramter : endHour")
+        assertTrue(endHour > hour, "invalid paramter : endHour")
     }
 }

@@ -6,8 +6,10 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import com.boxfox.calendar.model.Task
 import com.boxfox.calendar.domain.TaskUsecase
+import com.boxfox.calendar.model.lambda.TaskCreateRequest
 import com.boxfox.calendar.util.Postgresql
 import org.jooq.impl.DSL
+import java.sql.Date
 import java.sql.SQLException
 
 class TaskRepository : TaskUsecase {
@@ -24,16 +26,15 @@ class TaskRepository : TaskUsecase {
         }
     }
 
-    override fun createTask(task: Task): Single<Task> = Single.create { sub ->
+    override fun createTask(name: String, date: Date, startHour: Short, endHour: Short): Single<List<Task>> = Single.create { sub ->
         try {
-            val insertedTask = Postgresql.dsl().use { dsl ->
-                val taskRecord = dsl.insertInto(TASK).columns(TASK.NAME, TASK.DAY, TASK.HOUR)
-                        .values(task.name, task.sqlDate, task.hour)
-                        .returning()
-                        .fetchOne()
-                TaskEntityMapper.fromRecord(taskRecord)
+            val insertedTasks = Postgresql.dsl().use { dsl ->
+                var query = dsl.insertInto(TASK).columns(TASK.NAME, TASK.DAY, TASK.HOUR)
+                for (hour in startHour..endHour)
+                    query = query.values(name, date, hour.toShort())
+                query.returning().fetch().map { TaskEntityMapper.fromRecord(it) }
             }
-            sub.onSuccess(insertedTask)
+            sub.onSuccess(insertedTasks)
         } catch (e: SQLException) {
             sub.onError(e)
         }

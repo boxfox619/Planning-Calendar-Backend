@@ -1,6 +1,8 @@
 package com.boxfox.calendar.model.lambda
 
-class TaskLookupRequest(val year: Int, val month: Int) : Request {
+class TaskLookupRequest : Request {
+    var year: Int = 0
+    var month: Int = 0
 
     override fun assertFields() {
         assertTrue(year > 0, "Invalid parameter: year")
