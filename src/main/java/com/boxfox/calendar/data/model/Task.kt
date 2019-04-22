@@ -1,13 +1,13 @@
 package com.boxfox.calendar.data.model
 
-class Task(val id: Int) : Model() {
-    lateinit var name: String
-    lateinit var date: String
-    var durationTime: Int = 1
+import java.util.*
 
-    override fun assertFields() {
-        valid(name, "missing parameter : name")
-        valid(date, "missing parameter date")
-    }
+open class Task(val id: Int) {
+    lateinit var name: String
+    lateinit var date: Date
+    var hour: Short = 1
+
+    val sqlDate: java.sql.Date
+        get() = java.sql.Date(date.time)
 
 }
