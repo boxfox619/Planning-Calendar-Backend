@@ -1,4 +1,4 @@
-package com.boxfox.calendar.data.model
+package com.boxfox.calendar.model
 
 import java.util.*
 

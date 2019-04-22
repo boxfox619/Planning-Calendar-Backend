@@ -1,6 +1,6 @@
-package com.boxfox.calendar.data.model.lambda
+package com.boxfox.calendar.model.lambda
 
-import com.boxfox.calendar.data.model.Task
+import com.boxfox.calendar.model.Task
 
 class TaskCreateRequest(id: Int, val endHour: Int) : Task(id), Request {
 

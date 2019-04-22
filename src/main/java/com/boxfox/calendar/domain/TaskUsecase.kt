@@ -2,7 +2,7 @@ package com.boxfox.calendar.domain
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import com.boxfox.calendar.data.model.Task
+import com.boxfox.calendar.model.Task
 
 interface TaskUsecase : Usecase {
     fun loadTasks(year: Int, month: Int): Single<List<Task>>

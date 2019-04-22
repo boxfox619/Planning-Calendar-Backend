@@ -2,9 +2,9 @@ package com.boxfox.calendar.handler
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestHandler
-import com.boxfox.calendar.data.model.lambda.Response
-import com.boxfox.calendar.data.model.lambda.TaskCreateRequest
-import com.boxfox.calendar.data.repository.postgres.TaskRepository
+import com.boxfox.calendar.model.lambda.Response
+import com.boxfox.calendar.model.lambda.TaskCreateRequest
+import com.boxfox.calendar.repository.postgres.TaskRepository
 import com.boxfox.calendar.domain.TaskUsecase
 
 class AddTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : RequestHandler<TaskCreateRequest, Response> {

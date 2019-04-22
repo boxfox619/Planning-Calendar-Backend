@@ -1,6 +1,6 @@
-package com.boxfox.calendar.data.model.lambda
+package com.boxfox.calendar.model.lambda
 
-import com.boxfox.calendar.data.model.Task
+import com.boxfox.calendar.model.Task
 
 class TaskEditRequest(id: Int) : Task(id), Request {
 

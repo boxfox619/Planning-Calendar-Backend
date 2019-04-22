@@ -1,14 +1,13 @@
-package com.boxfox.calendar.data.repository.postgres
+package com.boxfox.calendar.repository.postgres
 
-import com.boxfox.calendar.data.database.Tables.TASK
-import com.boxfox.calendar.data.model.RecordNotFoundException
+import com.boxfox.calendar.database.Tables.TASK
+import com.boxfox.calendar.model.RecordNotFoundException
 import io.reactivex.Completable
 import io.reactivex.Single
-import com.boxfox.calendar.data.model.Task
+import com.boxfox.calendar.model.Task
 import com.boxfox.calendar.domain.TaskUsecase
-import com.boxfox.calendar.service.Postgresql
+import com.boxfox.calendar.util.Postgresql
 import org.jooq.impl.DSL
-import java.lang.NullPointerException
 import java.sql.SQLException
 
 class TaskRepository : TaskUsecase {

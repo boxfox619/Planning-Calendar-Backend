@@ -1,4 +1,4 @@
-package com.boxfox.calendar.service
+package com.boxfox.calendar.util
 
 import org.jooq.impl.DSL
 import java.sql.Connection

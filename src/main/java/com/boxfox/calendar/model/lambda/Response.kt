@@ -1,3 +1,3 @@
-package com.boxfox.calendar.data.model.lambda
+package com.boxfox.calendar.model.lambda
 
 class Response(val statuscode: Int, val body: Any)

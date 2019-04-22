@@ -1,7 +1,7 @@
-package com.boxfox.calendar.data.repository.postgres
+package com.boxfox.calendar.repository.postgres
 
-import com.boxfox.calendar.data.database.Tables.TASK
-import com.boxfox.calendar.data.model.Task
+import com.boxfox.calendar.database.Tables.TASK
+import com.boxfox.calendar.model.Task
 import org.jooq.Record
 
 object TaskEntityMapper {

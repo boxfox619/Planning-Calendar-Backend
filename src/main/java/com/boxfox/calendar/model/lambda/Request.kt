@@ -1,4 +1,4 @@
-package com.boxfox.calendar.data.model.lambda
+package com.boxfox.calendar.model.lambda
 
 interface Request {
 
