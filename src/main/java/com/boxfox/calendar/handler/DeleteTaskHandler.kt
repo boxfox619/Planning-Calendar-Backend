@@ -16,7 +16,7 @@ class DeleteTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : 
         return try {
             val taskId = req.pathParameters.get("id")?.toInt() ?: throw MissingParameterError("id")
             taskRepo.removeTask(taskId).blockingGet()?.let { throw it }
-            Response(200, "success")
+            Response(201, "success")
         } catch (e: Throwable) {
             ctx.logger.log(e.message)
             when (e) {

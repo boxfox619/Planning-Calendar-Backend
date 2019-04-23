@@ -21,7 +21,7 @@ class EditTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : Re
             val taskId = req.pathParameters.get("id")?.toInt() ?: throw MissingParameterError("id")
             val input = gson.fromJson<TaskRequest>(req.body, TaskRequest::class.java).also { it.assertFields() }
             taskRepo.editTask(taskId, input).blockingGet()?.let { throw it }
-            Response(200, "success")
+            Response(201, "success")
         } catch (e: Throwable) {
             ctx.logger.log(e.message)
             when (e) {
