@@ -9,7 +9,7 @@ import com.boxfox.calendar.model.lambda.Response
 import com.boxfox.calendar.repository.postgres.TaskRepository
 import com.boxfox.calendar.domain.TaskUsecase
 import com.boxfox.calendar.model.MissingParameterError
-import com.boxfox.calendar.model.lambda.TaskEditRequest
+import com.boxfox.calendar.model.lambda.TaskRequest
 import com.google.gson.Gson
 
 class EditTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
@@ -19,7 +19,7 @@ class EditTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : Re
         ctx.logger.log("Create Task : $req")
         return try {
             val taskId = req.pathParameters.get("id")?.toInt() ?: throw MissingParameterError("id")
-            val input = gson.fromJson<TaskEditRequest>(req.body, TaskEditRequest::class.java)
+            val input = gson.fromJson<TaskRequest>(req.body, TaskRequest::class.java).also { it.assertFields() }
             taskRepo.editTask(taskId, input).blockingGet()?.let { throw it }
             Response(200, "success")
         } catch (e: Throwable) {

@@ -42,7 +42,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Task extends TableImpl<TaskRecord> {
 
-    private static final long serialVersionUID = 473817001;
+    private static final long serialVersionUID = 17283816;
 
     /**
      * The reference instance of <code>public.task</code>
@@ -73,9 +73,14 @@ public class Task extends TableImpl<TaskRecord> {
     public final TableField<TaskRecord, Date> DAY = createField("day", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
 
     /**
-     * The column <code>public.task.hour</code>.
+     * The column <code>public.task.starthour</code>.
      */
-    public final TableField<TaskRecord, Short> HOUR = createField("hour", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<TaskRecord, Short> STARTHOUR = createField("starthour", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+
+    /**
+     * The column <code>public.task.endhour</code>.
+     */
+    public final TableField<TaskRecord, Short> ENDHOUR = createField("endhour", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * Create a <code>public.task</code> table reference

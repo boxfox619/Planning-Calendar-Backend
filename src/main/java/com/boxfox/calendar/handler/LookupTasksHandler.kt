@@ -16,8 +16,8 @@ class LookupTasksHandler(private val taskRepo: TaskUsecase = TaskRepository()) :
         return try {
             val year = req.queryStringParameters.get("year")?.toInt() ?: throw MissingParameterError("year")
             val month = req.queryStringParameters.get("month")?.toInt() ?: throw MissingParameterError("month")
-            assertTrue(year > 0, "invalid parameter")
-            assertTrue(month in 1..12, "invalid parameter")
+            assertTrue(year > 0, "invalid parameter year : $year")
+            assertTrue(month in 1..12, "invalid parameter month : $month")
             val tasks = taskRepo.loadTasks(year, month).blockingGet()
             Response(200, tasks)
         } catch (e: Throwable) {

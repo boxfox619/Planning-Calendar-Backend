@@ -25,5 +25,5 @@ public class Tables {
     /**
      * The table <code>public.task</code>.
      */
-    public static final Task TASK = Task.TASK;
+    public static final Task TASK = com.boxfox.calendar.database.tables.Task.TASK;
 }

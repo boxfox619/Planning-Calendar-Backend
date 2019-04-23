@@ -7,7 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.boxfox.calendar.model.lambda.Response
 import com.boxfox.calendar.repository.postgres.TaskRepository
 import com.boxfox.calendar.domain.TaskUsecase
-import com.boxfox.calendar.model.lambda.TaskCreateRequest
+import com.boxfox.calendar.model.lambda.TaskRequest
 import com.google.gson.Gson
 
 class AddTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
@@ -16,9 +16,8 @@ class AddTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : Req
     override fun handleRequest(req: APIGatewayProxyRequestEvent, ctx: Context): APIGatewayProxyResponseEvent {
         ctx.logger.log("Create Task : $req")
         return try {
-            val input = gson.fromJson<TaskCreateRequest>(req.body, TaskCreateRequest::class.java)
-            input.assertFields()
-            val tasks = taskRepo.createTask(input.name, input.sqlDate, input.hour, input.endHour).blockingGet()
+            val input = gson.fromJson<TaskRequest>(req.body, TaskRequest::class.java).also { it.assertFields() }
+            val tasks = taskRepo.createTask(input).blockingGet()
             Response(200, tasks)
         } catch (e: Throwable) {
             ctx.logger.log(e.message)

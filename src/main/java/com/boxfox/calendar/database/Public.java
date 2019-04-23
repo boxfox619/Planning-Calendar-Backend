@@ -31,7 +31,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -1874325620;
+    private static final long serialVersionUID = 958292430;
 
     /**
      * The reference instance of <code>public</code>
@@ -41,7 +41,7 @@ public class Public extends SchemaImpl {
     /**
      * The table <code>public.task</code>.
      */
-    public final Task TASK = Task.TASK;
+    public final Task TASK = com.boxfox.calendar.database.tables.Task.TASK;
 
     /**
      * No further instances allowed
