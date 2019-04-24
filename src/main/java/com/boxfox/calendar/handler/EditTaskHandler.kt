@@ -16,18 +16,20 @@ class EditTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : Re
     private val gson = Gson()
 
     override fun handleRequest(req: APIGatewayProxyRequestEvent, ctx: Context): APIGatewayProxyResponseEvent {
+        val origin = req.headers["origin"]
         ctx.logger.log("Create Task : $req")
+        ctx.logger.log("Origin : $origin")
         return try {
             val taskId = req.pathParameters.get("id")?.toInt() ?: throw MissingParameterError("id")
             val input = gson.fromJson<TaskRequest>(req.body, TaskRequest::class.java).also { it.assertFields() }
             taskRepo.editTask(taskId, input).blockingGet()?.let { throw it }
-            Response(201, "success")
+            Response(201, "success", origin)
         } catch (e: Throwable) {
             ctx.logger.log(e.message)
             when (e) {
-                is AssertionError -> Response(400, e.message ?: "missing parameter")
-                is RecordNotFoundException -> Response(409, e.message!!)
-                else -> Response(500, "internal server error")
+                is AssertionError -> Response(400, e.message ?: "missing parameter", origin)
+                is RecordNotFoundException -> Response(409, e.message!!, origin)
+                else -> Response(500, "internal server error", origin)
             }
         }
     }

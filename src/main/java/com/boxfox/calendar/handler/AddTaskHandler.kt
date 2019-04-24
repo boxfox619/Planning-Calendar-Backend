@@ -14,16 +14,18 @@ class AddTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : Req
     private val gson = Gson()
 
     override fun handleRequest(req: APIGatewayProxyRequestEvent, ctx: Context): APIGatewayProxyResponseEvent {
+        val origin = req.headers["origin"]
         ctx.logger.log("Create Task : $req")
+        ctx.logger.log("Origin : $origin")
         return try {
             val input = gson.fromJson<TaskRequest>(req.body, TaskRequest::class.java).also { it.assertFields() }
             val tasks = taskRepo.createTask(input).blockingGet()
-            Response(200, tasks)
+            Response(200, tasks, origin)
         } catch (e: Throwable) {
             ctx.logger.log(e.message)
             when (e) {
-                is AssertionError -> Response(400, e.message ?: "missing parameter")
-                else -> Response(500, "internal server error")
+                is AssertionError -> Response(400, e.message ?: "missing parameter", origin)
+                else -> Response(500, "internal server error", origin)
             }
         }
     }

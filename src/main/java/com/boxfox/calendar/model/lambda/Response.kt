@@ -5,10 +5,18 @@ import com.google.gson.Gson
 
 class Response() : APIGatewayProxyResponseEvent() {
 
-    constructor(statusCode: Int, bodyData: Any) : this() {
-        val headers = mapOf("Content-Type" to "application/json", "Access-Control-Allow-Origin" to "*")
+    constructor(statusCode: Int, bodyData: Any, origin: String? = "*") : this() {
+        val headers = mutableMapOf(
+                "Content-Type" to "application/json",
+                "Access-Control-Allow-Origin" to (origin ?: "*"),
+                "Access-Control-Allow-Headers" to "*",
+                "Access-Control-Allow-Methods" to "OPTIONS,POST,GET,DELETE,PUT",
+                "Access-Control-Allow-Credentials" to "true")
         val bodyString = when (bodyData) {
-            String -> bodyData.toString()
+            String -> {
+                headers.put("Content-Type", "application/text")
+                bodyData.toString()
+            }
             else -> Gson().toJson(bodyData)
         }
         super.setStatusCode(statusCode)
