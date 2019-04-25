@@ -9,7 +9,7 @@ class Response() : APIGatewayProxyResponseEvent() {
         val headers = mutableMapOf(
                 "Content-Type" to "application/json",
                 "Access-Control-Allow-Origin" to (origin ?: "*"),
-                "Access-Control-Allow-Headers" to "*",
+                "Access-Control-Allow-Headers" to "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
                 "Access-Control-Allow-Methods" to "OPTIONS,POST,GET,DELETE,PUT",
                 "Access-Control-Allow-Credentials" to "true")
         val bodyString = when (bodyData) {
