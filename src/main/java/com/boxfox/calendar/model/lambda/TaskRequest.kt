@@ -7,7 +7,7 @@ class TaskRequest : Task(), Request {
     override fun assertFields() {
         valid(name, "missing parameter : name")
         valid(date, "missing parameter date")
-        assertTrue(startHour in 1..24, "invalid parameter : hour")
+        assertTrue(startHour in 0..23, "invalid parameter : hour")
         assertTrue(endHour > startHour, "invalid paramter : endHour")
     }
 }

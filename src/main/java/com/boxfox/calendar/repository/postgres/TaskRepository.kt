@@ -10,13 +10,28 @@ import com.boxfox.calendar.util.Postgresql
 import org.jooq.impl.DSL
 import java.sql.Date
 import java.sql.SQLException
+import java.util.*
 
 class TaskRepository : TaskUsecase {
+
+    private fun getCalendar(year: Int, month: Int, amount: Int): Calendar {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.MONTH, month)
+        calendar.add(Calendar.MONTH, amount)
+        return calendar
+    }
 
     override fun loadTasks(year: Int, month: Int): Single<List<Task>> = Single.create { sub ->
         try {
             val tasks = Postgresql.dsl().use { dsl ->
-                dsl.selectFrom(TASK).where(DSL.year(TASK.DAY).eq(year).and(DSL.month(TASK.DAY).eq(month))).fetch()
+                val prevCalendar = getCalendar(year, month, -1)
+                val nextCalendar = getCalendar(year, month, 1)
+                dsl.selectFrom(TASK)
+                        .where(DSL.year(TASK.DAY).eq(year).and(DSL.month(TASK.DAY).eq(month))
+                                .or(DSL.year(TASK.DAY).eq(prevCalendar.get(Calendar.YEAR)).and(DSL.month(TASK.DAY).eq(prevCalendar.get(Calendar.MONTH))))
+                                .or(DSL.year(TASK.DAY).eq(nextCalendar.get(Calendar.YEAR)).and(DSL.month(TASK.DAY).eq(nextCalendar.get(Calendar.MONTH))))
+                        ).fetch()
                         .map { TaskEntityMapper.fromRecord(it) }
             }
             sub.onSuccess(tasks)
