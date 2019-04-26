@@ -5,8 +5,13 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger
 import org.mockito.Matchers
 import org.mockito.Mockito
 
-object ConstextMock {
-    fun createContext(): Context {
+object TestUtil {
+
+    fun <T> anyObject(): T {
+        return Mockito.anyObject<T>()
+    }
+
+    fun mockContext(): Context {
         val contextMock = Mockito.mock(Context::class.java)
         val loggerMock = Mockito.mock(LambdaLogger::class.java)
         Mockito.`when`(contextMock.logger).thenReturn(loggerMock)

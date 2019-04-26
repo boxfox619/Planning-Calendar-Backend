@@ -2,42 +2,34 @@ package com.boxfox.calendar.handler
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.boxfox.calendar.domain.TaskUsecase
-import com.boxfox.calendar.model.lambda.TaskRequest
 import com.boxfox.calendar.util.TestUtil.mockContext
 import com.google.gson.Gson
-import io.reactivex.Single
+import io.reactivex.Completable
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 
-
-class LookupTaskHandlerTest {
+class DeleteTaskHandlerTest {
     private val gson = Gson()
 
     @Test
-    fun lookupTest() {
+    fun deleteTest() {
         val taskRepoMock = mock(TaskUsecase::class.java)
-        val task = TaskRequest().apply {
-            this.name = "이름"
-            this.date = "2019-11-23"
-            this.startHour = 12
-            this.endHour = 14
-        }
-        `when`(taskRepoMock.loadTasks(anyInt(), anyInt())).thenReturn(Single.just(listOf(task)))
+        `when`(taskRepoMock.removeTask(anyInt())).thenReturn(Completable.complete())
         val requestMock = Mockito.mock(APIGatewayProxyRequestEvent::class.java)
         `when`(requestMock.headers).thenReturn(mapOf("origin" to "test-origin"))
-        `when`(requestMock.queryStringParameters).thenReturn(mapOf("year" to "2019", "month" to "12"))
-        val handler = LookupTasksHandler(taskRepoMock)
+        `when`(requestMock.pathParameters).thenReturn(mapOf("id" to "123"))
+        val handler = DeleteTaskHandler(taskRepoMock)
         val response = handler.handleRequest(requestMock, mockContext())
-        assertEquals(response.statusCode, 200)
+        assertEquals(response.statusCode, 201)
     }
 
     @Test
     fun assertionTest() {
         val taskRepoMock = mock(TaskUsecase::class.java)
         val requestMock = Mockito.mock(APIGatewayProxyRequestEvent::class.java)
-        val handler = LookupTasksHandler(taskRepoMock)
+        val handler = DeleteTaskHandler(taskRepoMock)
         val response = handler.handleRequest(requestMock, mockContext())
         assertEquals(response.statusCode, 400)
     }

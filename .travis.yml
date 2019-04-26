@@ -1,0 +1,4 @@
+language: java
+script:
+  - mvn test
+  - mvn clean package shade:shade -DskipTests

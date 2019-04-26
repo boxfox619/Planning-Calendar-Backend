@@ -28,6 +28,7 @@ class EditTaskHandler(private val taskRepo: TaskUsecase = TaskRepository()) : Re
         } catch (e: Throwable) {
             ctx.logger.log(e.message)
             when (e) {
+                is UninitializedPropertyAccessException -> Response(400, "missing parameters", origin)
                 is AssertionError -> Response(400, e.message ?: "missing parameter", origin)
                 is RecordNotFoundException -> Response(409, e.message!!, origin)
                 else -> Response(500, "internal server error", origin)

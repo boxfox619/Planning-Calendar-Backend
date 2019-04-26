@@ -3,19 +3,20 @@ package com.boxfox.calendar.handler
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.boxfox.calendar.domain.TaskUsecase
 import com.boxfox.calendar.model.lambda.TaskRequest
-import com.boxfox.calendar.util.TestUtil
+import com.boxfox.calendar.util.TestUtil.anyObject
 import com.boxfox.calendar.util.TestUtil.mockContext
 import com.google.gson.Gson
-import io.reactivex.Single
+import io.reactivex.Completable
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 
-class AddTaskHandlerTest {
+class EditTaskHandlerTest {
     private val gson = Gson()
 
     @Test
-    fun createTest() {
+    fun editTest() {
         val taskRepoMock = mock(TaskUsecase::class.java)
         val task = TaskRequest().apply {
             this.name = "이름"
@@ -23,28 +24,21 @@ class AddTaskHandlerTest {
             this.startHour = 12
             this.endHour = 14
         }
-        `when`(taskRepoMock.createTask(TestUtil.anyObject())).thenReturn(Single.just(task))
-        val requestMock = mock(APIGatewayProxyRequestEvent::class.java)
+        `when`(taskRepoMock.editTask(anyInt(), anyObject())).thenReturn(Completable.complete())
+        val requestMock = Mockito.mock(APIGatewayProxyRequestEvent::class.java)
         `when`(requestMock.headers).thenReturn(mapOf("origin" to "test-origin"))
+        `when`(requestMock.pathParameters).thenReturn(mapOf("id" to "123"))
         `when`(requestMock.body).thenReturn(gson.toJson(task))
-        val handler = AddTaskHandler(taskRepoMock)
+        val handler = EditTaskHandler(taskRepoMock)
         val response = handler.handleRequest(requestMock, mockContext())
-        assertEquals(response.body, gson.toJson(task))
-        assertEquals(response.statusCode, 200)
+        assertEquals(response.statusCode, 201)
     }
 
     @Test
     fun assertionTest() {
         val taskRepoMock = mock(TaskUsecase::class.java)
-        val task = TaskRequest().apply {
-            this.date = "2019-11-23"
-            this.startHour = 12
-            this.endHour = 14
-        }
-        val requestMock = mock(APIGatewayProxyRequestEvent::class.java)
-        `when`(requestMock.headers).thenReturn(mapOf("origin" to "test-origin"))
-        `when`(requestMock.body).thenReturn(gson.toJson(task))
-        val handler = AddTaskHandler(taskRepoMock)
+        val requestMock = Mockito.mock(APIGatewayProxyRequestEvent::class.java)
+        val handler = EditTaskHandler(taskRepoMock)
         val response = handler.handleRequest(requestMock, mockContext())
         assertEquals(response.statusCode, 400)
     }
