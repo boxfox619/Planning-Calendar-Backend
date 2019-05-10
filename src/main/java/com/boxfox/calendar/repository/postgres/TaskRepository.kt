@@ -86,4 +86,13 @@ class TaskRepository : TaskUsecase {
         }
     }
 
+    override fun ping() = Completable.create { sub ->
+        try {
+            Postgresql.dsl().selectFrom(TASK).fetch(1).count()
+            sub.onComplete()
+        } catch (e: SQLException) {
+            sub.onError(e)
+        }
+    }
+
 }

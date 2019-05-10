@@ -9,4 +9,5 @@ interface TaskUsecase : Usecase {
     fun createTask(task: Task): Single<Task>
     fun removeTask(id: Int): Completable
     fun editTask(id: Int, task: Task): Completable
+    fun ping(): Completable
 }
